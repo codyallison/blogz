@@ -4,7 +4,20 @@
         <title>Build-A-Blog</title>
     </head>
     <body>
-            <a href="/blog">Homepage</a> <a href="/newpost">New Post</a>
+            <div style='float: right'>
+                    {% if 'user' in session %}
+                      {{ session['user'] }}
+                      <form action="/logout" method="post" id='logout'>
+                        <input type="submit" value="Log Out" />
+                      </form>
+                    {% else %}
+                      <a href="login">login</a> | <a href="signup">signup</a>
+                    {% endif %}
+                  </div>
+                  <h1>
+                      Express Yourself!
+                  </h1>
+            <a href="/">Home</a> <a href="/blog">All Posts</a> <a href="/newpost">New Post</a>
         {% block content %}
         
         {% endblock %}

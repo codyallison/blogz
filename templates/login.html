@@ -2,5 +2,12 @@
 
 {% block content %}
 
+<h2>Login</h2>
+<form action="/login" method="post">
+  <p><label>Username<input type="text" name="username" value="{{username}}" /></label> {{user_not_exist}} </p>
+  <p><label>Password<input type="password" name="password"/></label> {{login_error}} </p>
+  <p><input type="submit" value="Login"/></p>
+</form>
+<p>Don't have an account? <a href='signup' >Create One!</a></p>
 
 {% endblock %}

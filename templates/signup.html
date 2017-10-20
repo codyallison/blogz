@@ -2,5 +2,25 @@
 
 {% block content %}
 
+<h1>Sign up to start writing!</h1>
+
+<form action="/signup" method="post">
+    <label>
+        Username
+        <input type="text" name="username" value="{{username}}"/>
+    </label>&nbsp;{{username_error}}
+    <br>
+    <label>
+        Password
+        <input type="password" name="password"/>
+    </label>&nbsp;{{password_error}}
+    <br>
+    <label>
+        Verify Password
+        <input type="password" name="verify"/>
+    </label>&nbsp;{{verify_error}}
+    <br>
+    <input type="submit" value="submit"/>
+</form>
 
 {% endblock %}
