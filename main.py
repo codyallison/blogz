@@ -42,6 +42,8 @@ def get_post_by_id(id):
 
 @app.route('/')
 def index():
+
+    #lists all authors
     users = User.query.all()
     return render_template('index.html',users=users)
 
@@ -49,6 +51,8 @@ def index():
 def blog():
     user = request.args.get('user')
     id = request.args.get('id')
+
+    #dynamic content based on route (all, by author, by post id)
     if user:
         return render_template('blog.html', posts=get_user_posts(user))
     elif id:
@@ -66,7 +70,7 @@ def newpost():
         title=request.form['title']
         body=request.form['body']
     
-        
+        # validate title/body
         if len(title) < 1:
             title_error="Enter a title"
             return render_template('newpost.html', title=title, body=body, title_error=title_error)
@@ -74,21 +78,16 @@ def newpost():
             body_error="Enter a body"
             return render_template('newpost.html', title=title, body=body, body_error=body_error)
 
+        #write newpost to database
         post=Posts(title, body, owner)
         db.session.add(post)
         db.session.commit()
         
-    
 
         return redirect('/blog?id=' + str(post.id))
     else:
         return render_template('newpost.html')
 
-@app.route('/post')
-def individual_post():
-    post_id = request.args.get("id")
-    post = Posts.query.get(post_id)
-    return render_template('post.html', post=post)
 
 @app.route('/signup', methods=['GET','POST'])
 def signup():
@@ -102,7 +101,7 @@ def signup():
         password_error =''
         verify_error = ''
         
-    
+        #validation - username    
         if len(username) < 1:
             user_error = "Please enter a user name"
             return render_template("signup.html", username=username, username_error=user_error, password_error=password_error, verify_error=verify_error)            
@@ -110,6 +109,7 @@ def signup():
             user_error = "Please enter a username longer than 3 characters"
             return render_template("signup.html", username=username, username_error=user_error, password_error=password_error, verify_error=verify_error)
 
+        #validation - password
         if len(password) <1:
             password_error = "Please enter a password"
             return render_template("signup.html", username=username, username_error=user_error, password_error=password_error, verify_error=verify_error)
@@ -126,6 +126,7 @@ def signup():
             verify_error = "Please verify the password"
             return render_template("signup.html", username=username, username_error=user_error, password_error=password_error, verify_error=verify_error)
         
+        #validate user doesn't exist already
         existing_user = User.query.filter_by(username=username).first()
         if not existing_user:
             user = User(username=username, password=password)
@@ -153,6 +154,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
+        #login validation username
         users = User.query.filter_by(username=username)
         if users.count() == 1:
             user = users.first()
@@ -168,7 +170,9 @@ def login():
             user_not_exist = "We don't find an account for you"
             return render_template("login.html", user_not_exist=user_not_exist)
 
-endpoints_without_login = ['login', 'signup', 'blog', 'index', 'post']
+
+#require login to make new post
+endpoints_without_login = ['login', 'signup', 'blog', 'index']
 
 @app.route("/logout", methods=['POST'])
 def logout():
