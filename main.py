@@ -109,11 +109,7 @@ def signup():
             user_error = "Please enter a username longer than 3 characters"
             return render_template("signup.html", username=username, username_error=user_error, password_error=password_error, verify_error=verify_error)
 
-        #validation - password
-        if len(password) <1:
-            password_error = "Please enter a password"
-            return render_template("signup.html", username=username, username_error=user_error, password_error=password_error, verify_error=verify_error)
-            
+             
         elif password != verify:
             verify_error = "Passwords do not match"
             return render_template("signup.html", username=username, username_error=user_error, password_error=password_error, verify_error=verify_error)
